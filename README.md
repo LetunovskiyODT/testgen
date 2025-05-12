@@ -51,13 +51,21 @@ python testgen.py config
 python testgen.py report [--format FORMAT] [--output OUTPUT]
 
 # Генерация конфигурации CI
-python testgen.py ci [--type TYPE] [--output OUTPUT]
+python testgen.py ci [--type TYPE] [--output OUTPUT] [--lang LANGUAGE] [--framework FRAMEWORK]
 ```
 
 ### Интерактивный режим (TUI)
 
 ```bash
 python -m ui.tui
+```
+
+### Создание удаленного репозитория GitHub
+
+```bash
+# Создание удаленного репозитория и загрузка всех файлов проекта
+# Требует персональный токен доступа GitHub с правами на создание репозиториев
+python create_remote_repo.py
 ```
 
 ## Примеры
@@ -89,7 +97,19 @@ python testgen.py report --format html --output ./reports
 ### Генерация конфигурации для GitHub Actions
 
 ```bash
-python testgen.py ci --type github
+python testgen.py ci --type github --lang python --framework pytest
+```
+
+### Создание удаленного репозитория
+
+```bash
+# Через переменную окружения (рекомендуется для безопасности)
+export GITHUB_TOKEN=your_personal_access_token
+python create_remote_repo.py
+
+# Или через интерактивный ввод
+python create_remote_repo.py
+# (затем введите токен по запросу)
 ```
 
 ## Структура проекта
@@ -101,6 +121,7 @@ testgen/
 ├── langs/             # Генераторы для разных языков
 ├── testengines/       # Запуск и анализ тестов
 ├── ui/                # Компоненты TUI
+├── ci/                # Интеграция с CI/CD и GitHub API
 ├── requirements.txt   # Зависимости проекта
 └── README.md          # Документация
 ```
