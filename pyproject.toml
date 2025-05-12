@@ -28,4 +28,59 @@ dependencies = [
 ]
 
 [project.scripts]
-testgen = "testgen:main" 
+testgen = "testgen:main"
+
+[tool.pytest]
+testpaths = ["tests"]
+python_files = "test_*.py"
+python_functions = "test_*"
+python_classes = "Test*"
+
+[tool.isort]
+profile = "black"
+line_length = 88
+multi_line_output = 3
+
+[tool.black]
+line-length = 88
+target-version = ['py37', 'py38', 'py39', 'py310']
+include = '\.pyi?$'
+
+[tool.mypy]
+python_version = "3.7"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+
+[tool.pylint.messages_control]
+disable = "C0111,R0903,C0103"
+
+[tool.testgen]
+# Настройки фреймворков для генерации тестов
+[tool.testgen.languages]
+python = ["pytest", "unittest"]
+javascript = ["jest", "mocha"]
+go = ["testing"]
+java = ["junit", "testng"]
+ruby = ["rspec", "minitest"]
+rust = ["cargo-test"]
+php = ["phpunit"]
+csharp = ["nunit", "xunit", "mstest"]
+typescript = ["jest", "mocha"]
+kotlin = ["junit", "kotlintest"]
+swift = ["xctest"]
+c = ["gtest", "cunit"]
+cpp = ["gtest", "catch2"]
+perl = ["test-more"]
+scala = ["scalatest"]
+haskell = ["hspec"]
+
+# Настройки отчетов
+[tool.testgen.reports]
+default_format = "html"
+output_dir = "reports"
+
+# Настройки CI/CD
+[tool.testgen.ci]
+default_type = "github" 

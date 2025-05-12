@@ -53,12 +53,61 @@ def gen(
     path: str = typer.Argument(".", help="Путь к файлам для генерации тестов"),
     language: str = typer.Option(None, "--lang", "-l", help="Язык программирования"),
     test_framework: str = typer.Option(None, "--framework", "-f", help="Тестовый фреймворк"),
+    output_dir: str = typer.Option(None, "--output", "-o", help="Директория для сохранения тестов"),
 ):
     """Генерация тестов для указанных файлов"""
     show_header()
     console.print(f"[bold green]Генерация тестов для[/bold green]: {path}")
     
-    # TODO: Добавить логику генерации тестов
+    try:
+        # Если язык не указан, определяем его автоматически
+        if not language:
+            detected_lang = lang_detector.detect_project_language(path)
+            if detected_lang:
+                console.print(f"Обнаружен язык программирования: [bold]{detected_lang}[/bold]")
+                language = detected_lang
+            else:
+                console.print("[red]Не удалось автоматически определить язык программирования[/red]")
+                return
+        
+        # Проверяем доступные фреймворки для языка
+        frameworks = lang_detector.get_available_test_frameworks(language)
+        if not frameworks:
+            console.print(f"[red]Для языка {language} не найдены доступные тестовые фреймворки[/red]")
+            return
+        
+        # Если фреймворк не указан, используем первый доступный
+        if not test_framework:
+            test_framework = frameworks[0]
+            console.print(f"Используется фреймворк по умолчанию: [bold]{test_framework}[/bold]")
+        elif test_framework not in frameworks:
+            console.print(f"[yellow]Фреймворк {test_framework} не поддерживается для языка {language}.[/yellow]")
+            console.print(f"[yellow]Доступные фреймворки: {', '.join(frameworks)}[/yellow]")
+            test_framework = frameworks[0]
+            console.print(f"[yellow]Используется фреймворк по умолчанию: {test_framework}[/yellow]")
+        
+        # Настраиваем директорию для вывода, если не указана
+        if not output_dir:
+            output_dir = os.path.join(path, "tests")
+            console.print(f"Тесты будут сохранены в: [bold]{output_dir}[/bold]")
+        
+        # Генерируем тесты
+        generated_tests = lang_detector.generate_tests_for_language(
+            directory=path,
+            language=language,
+            framework=test_framework,
+            output_dir=output_dir
+        )
+        
+        if generated_tests:
+            console.print(f"[green]Сгенерировано тестов: {len(generated_tests)}[/green]")
+            for test_path in generated_tests:
+                console.print(f"  - {test_path}")
+        else:
+            console.print("[yellow]Не удалось сгенерировать тесты[/yellow]")
+    
+    except Exception as e:
+        console.print(f"[red]Ошибка при генерации тестов: {str(e)}[/red]")
 
 
 @app.command()

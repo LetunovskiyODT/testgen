@@ -44,6 +44,21 @@ def run_tests(language: str, framework: str, test_path: str, verbose: bool = Fal
             "junit": ["./gradlew", "test"],
             "testng": ["./gradlew", "test"]
         },
+        "ruby": {
+            "rspec": ["bundle", "exec", "rspec", test_path],
+            "minitest": ["ruby", "-Ilib:test", test_path]
+        },
+        "rust": {
+            "cargo-test": ["cargo", "test"]
+        },
+        "php": {
+            "phpunit": ["./vendor/bin/phpunit", test_path]
+        },
+        "csharp": {
+            "nunit": ["dotnet", "test", "--filter", "TestCategory=NUnit"],
+            "xunit": ["dotnet", "test", "--filter", "TestCategory=XUnit"],
+            "mstest": ["dotnet", "test", "--filter", "TestCategory=MSTest"]
+        }
         # Добавить другие языки и фреймворки по необходимости
     }
     
@@ -60,6 +75,16 @@ def run_tests(language: str, framework: str, test_path: str, verbose: bool = Fal
         if verbose:
             if language.lower() == "python" and framework.lower() == "pytest":
                 command.append("-v")
+            elif language.lower() == "python" and framework.lower() == "unittest":
+                command.append("-v")
+            elif language.lower() == "javascript" and framework.lower() == "jest":
+                command.append("--verbose")
+            elif language.lower() == "javascript" and framework.lower() == "mocha":
+                command.append("--reporter=spec")
+            elif language.lower() == "go" and framework.lower() == "testing":
+                command.append("-v")
+            elif language.lower() == "ruby" and framework.lower() == "rspec":
+                command.append("--format=documentation")
             # Добавить другие флаги для других языков и фреймворков
             
         with Progress() as progress:

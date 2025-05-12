@@ -61,4 +61,121 @@ def get_available_test_frameworks(language: str) -> List[str]:
         "csharp": ["nunit", "xunit", "mstest"],
     }
     
-    return frameworks.get(language.lower(), []) 
+    return frameworks.get(language.lower(), [])
+
+
+def get_source_files(directory: str, language: str) -> List[str]:
+    """
+    Находит все исходные файлы указанного языка в директории.
+    
+    Args:
+        directory (str): Директория для поиска
+        language (str): Язык программирования
+        
+    Returns:
+        List[str]: Список путей к найденным файлам
+    """
+    file_patterns = {
+        "python": ["*.py"],
+        "javascript": ["*.js", "*.jsx", "*.ts", "*.tsx"],
+        "go": ["*.go"],
+        "java": ["*.java"],
+        "ruby": ["*.rb"],
+        "rust": ["*.rs"],
+        "php": ["*.php"],
+        "csharp": ["*.cs"],
+    }
+    
+    # Исключаем файлы тестов
+    exclude_patterns = {
+        "python": ["test_*.py", "*_test.py"],
+        "javascript": ["*.test.js", "*.spec.js", "*-test.js"],
+        "go": ["*_test.go"],
+        "java": ["*Test.java"],
+        "ruby": ["*_spec.rb", "*_test.rb"],
+        "rust": ["*_test.rs"],
+        "php": ["*Test.php"],
+        "csharp": ["*Test.cs", "*Tests.cs"],
+    }
+    
+    patterns = file_patterns.get(language.lower(), [])
+    if not patterns:
+        return []
+    
+    exclude_list = exclude_patterns.get(language.lower(), [])
+    
+    source_files = []
+    for pattern in patterns:
+        for file_path in glob.glob(os.path.join(directory, "**", pattern), recursive=True):
+            # Проверяем, что это не тестовый файл
+            is_test_file = any(
+                os.path.basename(file_path).lower().endswith(exclude_pattern[1:].lower())
+                or os.path.basename(file_path).lower().startswith(exclude_pattern[:-1].lower())
+                for exclude_pattern in exclude_list if "*" in exclude_pattern
+            )
+            
+            if not is_test_file:
+                source_files.append(file_path)
+    
+    return source_files
+
+
+def generate_tests_for_language(directory: str, language: str, framework: Optional[str] = None, output_dir: Optional[str] = None) -> List[str]:
+    """
+    Генерирует тесты для всех исходных файлов указанного языка в директории.
+    
+    Args:
+        directory (str): Директория для поиска исходных файлов
+        language (str): Язык программирования
+        framework (Optional[str]): Тестовый фреймворк (если None, выбирается первый доступный)
+        output_dir (Optional[str]): Директория для сохранения тестов (если None, возвращает тесты как строки)
+        
+    Returns:
+        List[str]: Список путей к сгенерированным тестам
+    """
+    # Определяем язык и фреймворк
+    if not language:
+        language = detect_project_language(directory)
+        if not language:
+            raise ValueError("Не удалось определить язык программирования")
+    
+    # Выбираем фреймворк по умолчанию, если не указан
+    if not framework:
+        frameworks = get_available_test_frameworks(language)
+        if not frameworks:
+            raise ValueError(f"Для языка {language} не найдены доступные тестовые фреймворки")
+        framework = frameworks[0]
+    
+    # Находим исходные файлы
+    source_files = get_source_files(directory, language)
+    if not source_files:
+        raise ValueError(f"Не найдены исходные файлы языка {language} в директории {directory}")
+    
+    # Генерируем тесты для каждого файла
+    generated_tests = []
+    
+    # Импортируем соответствующий генератор для каждого языка
+    if language.lower() == "python":
+        from langs.python_generator import generate_tests as py_gen
+        for file_path in source_files:
+            test_path = py_gen(file_path, framework, output_dir)
+            if test_path:
+                generated_tests.append(test_path)
+    
+    elif language.lower() == "javascript":
+        from langs.javascript_generator import generate_tests as js_gen
+        for file_path in source_files:
+            test_path = js_gen(file_path, output_dir)
+            if test_path:
+                generated_tests.append(test_path)
+    
+    elif language.lower() == "go":
+        from langs.go_generator import generate_tests as go_gen
+        for file_path in source_files:
+            test_path = go_gen(file_path, output_dir)
+            if test_path:
+                generated_tests.append(test_path)
+    
+    # TODO: Добавить поддержку других языков
+    
+    return generated_tests 
