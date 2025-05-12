@@ -12,6 +12,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../.
 
 from langs import lang_detector
 from testengines import runner
+from testengines import custom_runner
 from ui import tui
 from cmd.testgen.ci_gen import generate_ci_config
 
@@ -64,12 +65,56 @@ def gen(
 def run(
     path: str = typer.Argument(".", help="Путь к тестам для запуска"),
     verbose: bool = typer.Option(False, "--verbose", "-v", help="Подробный вывод"),
+    use_custom_runner: bool = typer.Option(False, "--custom", "-c", help="Использовать собственный тестраннер"),
+    include: str = typer.Option(None, "--include", "-i", help="Шаблоны для включения тестов (через запятую)"),
+    exclude: str = typer.Option(None, "--exclude", "-e", help="Шаблоны для исключения тестов (через запятую)"),
 ):
     """Запуск тестов"""
     show_header()
     console.print(f"[bold green]Запуск тестов в[/bold green]: {path}")
     
-    # TODO: Добавить логику запуска тестов
+    # Разбор шаблонов включения и исключения
+    include_patterns = include.split(",") if include else None
+    exclude_patterns = exclude.split(",") if exclude else None
+    
+    # Выбор тестраннера
+    if use_custom_runner:
+        console.print("[cyan]Используется собственный тестраннер[/cyan]")
+        verbosity = 2 if verbose else 1
+        result = custom_runner.run_tests(path, verbosity, include_patterns, exclude_patterns)
+        
+        # Вывод результатов уже осуществляется внутри custom_runner
+    else:
+        console.print("[cyan]Используется стандартный тестраннер (pytest)[/cyan]")
+        # Определяем язык программирования
+        language = lang_detector.detect_project_language(path)
+        
+        if not language:
+            console.print("[red]Не удалось определить язык программирования[/red]")
+            return
+            
+        # Выбор тестового фреймворка по умолчанию для языка
+        frameworks = lang_detector.get_available_test_frameworks(language)
+        framework = frameworks[0] if frameworks else None
+        
+        if not framework:
+            console.print(f"[red]Для языка {language} не найден подходящий тестовый фреймворк[/red]")
+            return
+            
+        console.print(f"Используется фреймворк: [bold]{framework}[/bold]")
+        
+        # Запуск тестов
+        result = runner.run_tests(language, framework, path, verbose)
+        
+        # Вывод результатов
+        status_color = "green" if result.success else "red"
+        status_text = "УСПЕШНО" if result.success else "ОШИБКА"
+        
+        console.print(f"\nСтатус: [{status_color}]{status_text}[/{status_color}]")
+        console.print(f"Вывод:\n{result.output}")
+        
+        if result.errors:
+            console.print(f"Ошибки:\n{result.errors}")
 
 
 @app.command()
@@ -95,48 +140,14 @@ def report(
 
 @app.command()
 def ci(
-    type: str = typer.Option("github", "--type", "-t", help="Тип CI (github, gitlab, circle)"),
-    output: str = typer.Option(".", "--output", "-o", help="Путь для сохранения конфигурации CI"),
-    language: str = typer.Option(None, "--lang", "-l", help="Язык программирования"),
-    framework: str = typer.Option(None, "--framework", "-f", help="Тестовый фреймворк"),
+    type: str = typer.Option("github", help="Тип CI (github, gitlab, jenkins)"),
+    output: str = typer.Option(".", help="Путь для сохранения конфигурации CI"),
 ):
     """Генерация конфигурации для CI"""
     show_header()
     console.print(f"[bold green]Генерация конфигурации для CI[/bold green]: {type}")
     
-    # Если язык не указан, пытаемся определить его автоматически
-    if not language:
-        detected_lang = lang_detector.detect_project_language()
-        if detected_lang:
-            console.print(f"Обнаружен язык программирования: [bold]{detected_lang}[/bold]")
-            language = detected_lang
-        else:
-            console.print("[yellow]Не удалось автоматически определить язык программирования[/yellow]")
-            language = tui.show_lang_select()
-            if not language:
-                console.print("[red]Не удалось продолжить без указания языка программирования[/red]")
-                return
-    
-    # Если фреймворк не указан, предлагаем выбрать из доступных
-    if not framework:
-        frameworks = lang_detector.get_available_test_frameworks(language)
-        if frameworks:
-            console.print(f"Доступные тестовые фреймворки для {language}: [bold]{', '.join(frameworks)}[/bold]")
-            framework = tui.show_framework_select(language)
-            if not framework:
-                console.print("[red]Не удалось продолжить без указания тестового фреймворка[/red]")
-                return
-        else:
-            console.print(f"[red]Для языка {language} нет доступных тестовых фреймворков[/red]")
-            return
-    
-    # Генерируем конфигурацию CI
-    config_path = generate_ci_config(language, framework, type, output)
-    
-    if config_path:
-        console.print(f"[green]Конфигурация CI успешно сгенерирована:[/green] {config_path}")
-    else:
-        console.print("[red]Не удалось сгенерировать конфигурацию CI[/red]")
+    # TODO: Добавить логику генерации конфигурации CI
 
 
 if __name__ == "__main__":
