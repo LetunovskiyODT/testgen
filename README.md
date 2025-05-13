@@ -3,7 +3,7 @@
 -->
 
 <div align="center">
-  <img src="https://github.com/LetunovskiyODT/testgen/raw/main/ico.ico" alt="TestGen Logo" width="150"/>
+  <img src="logo.png" alt="TestGen Logo" width="150"/>
   
   <h1>TestGen</h1>
   
@@ -12,23 +12,23 @@
   </p>
   
   <p>
-    <a href="https://github.com/LetunovskiyODT/testgen/releases/latest"><img src="https://img.shields.io/github/v/release/LetunovskiyODT/testgen?include_prereleases&style=flat-square&color=blue" alt="Версия"></a>
-    <a href="LICENSE"><img src="https://img.shields.io/badge/License-Apache%202.0-blue.svg?style=flat-square" alt="Лицензия"></a>
-    <img src="https://img.shields.io/badge/Платформа-Windows-blue?style=flat-square" alt="Платформа">
-    <img src="https://img.shields.io/badge/Python-3.10%2B-blue?style=flat-square&logo=python" alt="Python">
-    <a href="https://github.com/LetunovskiyODT/testgen/actions/workflows/tests.yml"><img src="https://github.com/LetunovskiyODT/testgen/actions/workflows/tests.yml/badge.svg" alt="Tests"></a>
-    <a href="https://github.com/LetunovskiyODT/testgen/actions/workflows/lint.yml"><img src="https://github.com/LetunovskiyODT/testgen/actions/workflows/lint.yml/badge.svg" alt="Lint"></a>
+    <a href="https://github.com/LetunovskiyODT/testgen/releases/latest"><img src="https://img.shields.io/github/v/release/LetunovskiyODT/testgen?include_prereleases&style=flat-square&color=blue" alt="Версия"/></a>
+    <a href="LICENSE"><img src="https://img.shields.io/badge/License-Apache%202.0-blue.svg?style=flat-square" alt="Лицензия"/></a>
+    <img src="https://img.shields.io/badge/Платформа-Windows-blue?style=flat-square" alt="Платформа"/>
+    <img src="https://img.shields.io/badge/Python-3.10%2B-blue?style=flat-square&logo=python" alt="Python"/>
+    <a href="https://github.com/LetunovskiyODT/testgen/actions/workflows/tests.yml"><img src="https://github.com/LetunovskiyODT/testgen/actions/workflows/tests.yml/badge.svg" alt="Tests"/></a>
+    <a href="https://github.com/LetunovskiyODT/testgen/actions/workflows/lint.yml"><img src="https://github.com/LetunovskiyODT/testgen/actions/workflows/lint.yml/badge.svg" alt="Lint"/></a>
     <a href="https://codecov.io/gh/LetunovskiyODT/testgen"><img src="https://codecov.io/gh/LetunovskiyODT/testgen/branch/main/graph/badge.svg" alt="Coverage"></a>
   </p>
   
   <h2>Скачать TestGen</h2>
   
   <p>
-    <a href="https://github.com/LetunovskiyODT/testgen/releases/latest/download/TestGen_Portable.zip"><img src="https://img.shields.io/badge/%E2%AC%87%20СКАЧАТЬ-TestGen%20Portable-blue?style=for-the-badge" alt="Скачать портативную версию"></a>
-    <br>
-    <a href="https://github.com/LetunovskiyODT/testgen/releases/latest/download/TestGen_Full.zip"><img src="https://img.shields.io/badge/%E2%AC%87%20СКАЧАТЬ-TestGen%20Full-green?style=for-the-badge" alt="Скачать полную версию"></a>
-    <br>
-    <a href="https://github.com/LetunovskiyODT/testgen/releases/latest/download/TestGen_Setup.exe"><img src="https://img.shields.io/badge/%E2%AC%87%20СКАЧАТЬ-TestGen%20Setup-red?style=for-the-badge" alt="Скачать установщик"></a>
+    <a href="https://github.com/LetunovskiyODT/testgen/releases/latest/download/TestGen_Portable.zip"><img src="https://img.shields.io/badge/⬇ СКАЧАТЬ-TestGen_Portable-blue?style=for-the-badge" alt="Скачать портативную версию"/></a>
+    <br><br>
+    <a href="https://github.com/LetunovskiyODT/testgen/releases/latest/download/TestGen_Full.zip"><img src="https://img.shields.io/badge/⬇ СКАЧАТЬ-TestGen_Full-green?style=for-the-badge" alt="Скачать полную версию"/></a>
+    <br><br>
+    <a href="https://github.com/LetunovskiyODT/testgen/releases/latest/download/TestGen_Setup.exe"><img src="https://img.shields.io/badge/⬇ СКАЧАТЬ-TestGen_Setup-red?style=for-the-badge" alt="Скачать установщик"/></a>
   </p>
 </div>
 
