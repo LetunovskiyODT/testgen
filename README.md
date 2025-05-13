@@ -3,7 +3,7 @@
 -->
 
 <div align="center">
-  <img src="logo.png" alt="TestGen Logo" width="150"/>
+  <img src="https://raw.githubusercontent.com/LetunovskiyODT/testgen/main/logo.png" alt="TestGen Logo" width="150"/>
   
   <h1>TestGen</h1>
   
@@ -28,7 +28,7 @@
     <br><br>
     <a href="https://github.com/LetunovskiyODT/testgen/releases/latest/download/TestGen_Full.zip"><img src="https://img.shields.io/badge/⬇ СКАЧАТЬ-TestGen_Full-green?style=for-the-badge" alt="Скачать полную версию"/></a>
     <br><br>
-    <a href="https://github.com/LetunovskiyODT/testgen/releases/latest/download/TestGen_Setup.exe"><img src="https://img.shields.io/badge/⬇ СКАЧАТЬ-TestGen_Setup-red?style=for-the-badge" alt="Скачать установщик"/></a>
+    <a href="https://github.com/LetunovskiyODT/testgen/releases/latest/download/TestGen_Setup.bat"><img src="https://img.shields.io/badge/⬇ СКАЧАТЬ-TestGen_Setup-red?style=for-the-badge" alt="Скачать установщик"/></a>
   </p>
 </div>
 
@@ -78,8 +78,8 @@
     <li>
       <strong>Автоматическая установка (рекомендуется):</strong>
       <ul>
-        <li>Скачайте <a href="https://github.com/LetunovskiyODT/testgen/releases/latest/download/TestGen_Setup.exe">установщик TestGen</a></li>
-        <li>Запустите TestGen_Setup.exe от имени администратора</li>
+        <li>Скачайте <a href="https://github.com/LetunovskiyODT/testgen/releases/latest/download/TestGen_Setup.bat">установщик TestGen</a></li>
+        <li>Запустите TestGen_Setup.bat от имени администратора</li>
         <li>Следуйте инструкциям установщика</li>
         <li>После установки TestGen будет доступен в меню Пуск, на рабочем столе и через команду <code>testgen</code> в командной строке</li>
       </ul>
